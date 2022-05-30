@@ -1,20 +1,29 @@
+import {
+  StyleSheet,
+  SafeAreaView,
+  Platform
+} from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { colors } from './src/modal/color';
+import Route from './src/navigation/Router';
+import 'react-native-gesture-handler';
+import Amplify, { Auth } from 'aws-amplify';
+import awsconfig from './src/aws-exports';
+Amplify.configure(awsconfig);
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaView style={styles.safeAreaViewForAndroid}>
+      <StatusBar style="auto" backgroundColor={colors.primary} />
+      <Route />
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safeAreaViewForAndroid: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+    paddingTop: Platform.OS === 'android' ? 25 : 0,
+    backgroundColor: colors.background
+  }
 });

@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-vegbookf-dev-233426-authRole",
+      "UnauthRoleArn": "arn:aws:iam::427230696606:role/amplify-vegbookf-dev-233426-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::427230696606:role/amplify-vegbookf-dev-233426-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-vegbookf-dev-233426-deployment",
+      "UnauthRoleName": "amplify-vegbookf-dev-233426-unauthRole",
+      "StackName": "amplify-vegbookf-dev-233426",
+      "StackId": "arn:aws:cloudformation:us-east-1:427230696606:stack/amplify-vegbookf-dev-233426/07906af0-dfc1-11ec-bb17-12a15a619e13",
+      "AmplifyAppId": "dj3w1lshn25uv"
+    },
+    "categories": {
+      "auth": {
+        "vegbookf32ef9d85": {}
+      }
+    }
+  }
+}
