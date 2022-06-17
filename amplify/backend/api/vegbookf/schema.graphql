@@ -1,4 +1,9 @@
 type Listing @model 
+@key(
+    name: "listingByCreatedAt" 
+    fields: ["commonID", "createdAt"]
+    queryField: "gettingListingByCreatedAt"
+  )
 @auth(
   rules: [
     {allow: owner}
@@ -16,11 +21,7 @@ type Listing @model
   directions: String
   images: String
   userID: ID
-  commonID: String @index(
-    name: "listingByCreatedAt" 
-    sortKeyFields: ["createdAt"]
-    queryField: "gettingListingByCreatedAt"
-  )
+  commonID: String 
   createdAt: AWSDateTime
 
 }

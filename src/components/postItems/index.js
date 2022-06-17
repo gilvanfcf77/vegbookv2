@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import {
     Text,
     View,
@@ -7,9 +8,15 @@ import {
 import styles from './styles';
 import { useNavigation } from '@react-navigation/native';
 
-const PostItems = () => {
+const PostItems = (props) => {
 
     const navigation = useNavigation();
+
+    const post = props.post;
+
+    const [images] = useState(JSON.parse(post.images));
+
+    console.log(images);
 
     return (
         <Pressable
@@ -20,17 +27,17 @@ const PostItems = () => {
         >
             <View style={styles.postWrap}>
                 <Image
-                    source={{ uri: 'https://picsum.photos/200/300' }}
+                    source={{ uri: `https://d2ejckwzrz2fdl.cloudfront.net/fit-in/400x400/public/${images[0].imageUri}` }}
                     style={styles.postImage}>
                 </Image>
                 <View style={styles.postContentWrap}>
                     <View>
-                        <Text style={styles.postTitle}>Nome da receita</Text>
-                        <Text style={styles.postPlace}>New York</Text>
+                        <Text style={styles.postTitle}>{post.title}</Text>
+                        <Text style={styles.postPlace}>Enviada em {post.createdAt}</Text>
                     </View>
-                    <Text style={styles.postValue}
+                    {/* <Text style={styles.postValue}
                     >$100 / Day
-                    </Text>
+                    </Text> */}
                 </View>
             </View>
         </Pressable>

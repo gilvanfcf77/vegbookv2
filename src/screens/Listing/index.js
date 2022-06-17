@@ -5,33 +5,63 @@ import {
     Pressable,
     TextInput,
     Image,
-    ScrollView
+    ScrollView,
+    Alert
 } from 'react-native';
 import { withAuthenticator } from 'aws-amplify-react-native';
-import { Auth } from 'aws-amplify'
+import { Auth, Storage, API, graphqlOperation } from 'aws-amplify'
 import { AntDesign } from '@expo/vector-icons';
 import { colors } from '../../modal/color';
 import styles from './styles';
 import { useNavigation, useRoute } from "@react-navigation/native";
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
+import { createListing } from '../../graphql/mutations';
 
 const Listing = () => {
 
     const navigation = useNavigation();
 
-    Auth.currentAuthenticatedUser()
-        .then((user) => {
-            console.log(user.attributes.email)
-        })
-        .catch((err) => {
-            console.log(err);
-            throw err;
-        })
+    const [userID, setUserID] = useState('');
 
     const [imageData, setImageData] = useState([]);
     const [category, setCategory] = useState({ categoryID: 0, categoryName: "Tipo de receita" });
     const [title, setTitle] = useState("");
     const [ingredients, setIngredients] = useState("");
     const [directions, setDirections] = useState("");
+
+    const [postSuccess, setPostSuccess] = useState('');
+    const [postProcessing, setPostProcessing] = useState(false);
+
+    useEffect(() => {
+        if (postSuccess !== '') {
+
+            setPostProcessing(false);
+
+            Alert.alert(
+                'Sucesso',
+                postSuccess,
+                [
+                    {
+                        text: 'OK',
+                        onPress: () => { navigation.navigate('Home', {screen: "Explorar"}) }
+
+                    }
+                ]
+            )
+        }
+    }, [postSuccess]);
+
+
+    Auth.currentAuthenticatedUser()
+        .then((user) => {
+            console.log(user.attributes.sub)
+            setUserID(user.attributes.sub)
+        })
+        .catch((err) => {
+            console.log(err);
+            throw err;
+        })
 
     const route = useRoute();
 
@@ -49,8 +79,51 @@ const Listing = () => {
         }
     });
 
+    const imageAllURL = [];
+
+    const storeToDB = async () => {
+
+        setPostProcessing(true);
+
+        imageData && imageData.map(async (image, index) => {
+            const imageURL = image.uri;
+            const response = await fetch(imageURL);
+            const blob = await response.blob();
+            const urlParts = imageURL.split('.');
+            const extention = urlParts[urlParts.length - 1];
+            const key = `${uuidv4()}.${extention}`;
+            imageAllURL.push({ imageUri: key });
+
+            await Storage.put(key, blob);
+
+            if (imageData.length === index + 1) {
+                const postData = {
+                    title: title,
+                    categoryName: category.categoryName,
+                    categoryID: category.categoryID,
+                    ingredients: ingredients,
+                    directions: directions,
+                    images: JSON.stringify(imageAllURL),
+                    userID: userID,
+                    commonID: '1'
+                }
+
+                await API.graphql({
+                    query: createListing,
+                    variables: { input: postData },
+                    authMode: 'AMAZON_COGNITO_USER_POOLS'
+                });
+
+                setPostProcessing(false);
+                setPostSuccess("Receita cadastrada com sucesso!");
+
+            }
+
+        })
+    }
+
     return (
-        <View style={{ margin: 10 }}>
+        <ScrollView style={{ margin: 10 }}>
             <View>
                 <Text style={{ marginTop: 10 }}>Upload Images (max 5)</Text>
                 <Pressable
@@ -115,42 +188,45 @@ const Listing = () => {
             <View style={styles.inputTextStyle}>
                 <TextInput
                     placeholder='Escreva um título'
-                    style={{width: '100%'}}      
+                    style={{ width: '100%' }}
                     onChangeText={(text) => {
                         setTitle(text);
-                    }}              
+                    }}
                 />
             </View>
 
             <View style={styles.inputTextStyle}>
                 <TextInput
                     placeholder='Liste os ingredientes'
-                    style={{width: '100%'}}  
+                    style={{ width: '100%' }}
                     multiline={true}
                     onChangeText={(text) => {
                         setIngredients(text);
-                    }}                      
+                    }}
                 />
             </View>
 
             <View style={styles.inputTextStyle}>
                 <TextInput
                     placeholder='Descreva o modo de preparo'
-                    style={{width: '100%'}}  
+                    style={{ width: '100%' }}
+                    multiline={true}
                     onChangeText={(text) => {
                         setDirections(text);
-                    }}                      
+                    }}
                 />
             </View>
 
-            <View
+            <Pressable
+                onPress={() => { storeToDB() }}
+                disabled={postProcessing}
                 style={{
                     margin: 10,
                     borderRadius: 30,
                     backgroundColor: colors.primary,
                     alignItems: 'center',
                     paddingLeft: 20,
-                    marginTop: 80,
+                    marginTop: 20,
                     elevation: 5
                 }}
             >
@@ -162,10 +238,10 @@ const Listing = () => {
                         fontWeight: 'bold'
                     }}
                 >
-                    Enviar receita
+                    {postProcessing ? "Processing..." : "Enviar receita"}
                 </Text>
-            </View>
-        </View>
+            </Pressable>
+        </ScrollView>
     );
 }
 
