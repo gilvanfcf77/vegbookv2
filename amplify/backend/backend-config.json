@@ -24,5 +24,35 @@
         ]
       }
     }
+  },
+  "api": {
+    "vegbookf": {
+      "service": "AppSync",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "auth",
+          "resourceName": "vegbookf32ef9d85",
+          "attributes": [
+            "UserPoolId"
+          ]
+        }
+      ],
+      "output": {
+        "authConfig": {
+          "defaultAuthentication": {
+            "authenticationType": "AWS_IAM"
+          },
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+              "userPoolConfig": {
+                "userPoolId": "authvegbookf32ef9d85"
+              }
+            }
+          ]
+        }
+      }
+    }
   }
 }

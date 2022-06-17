@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "apiName": "vegbookf",
+    "serviceName": "AppSync",
+    "gqlSchemaPath": "C:\\Users\\Gilvan\\Documents\\apps\\VegBookF\\amplify\\backend\\api\\vegbookf\\schema.graphql",
+    "defaultAuthType": {
+      "mode": "AWS_IAM"
+    },
+    "conflictResolution": {},
+    "additionalAuthTypes": [
+      {
+        "mode": "AMAZON_COGNITO_USER_POOLS",
+        "cognitoUserPoolId": "authvegbookf32ef9d85"
+      }
+    ]
+  }
+}
