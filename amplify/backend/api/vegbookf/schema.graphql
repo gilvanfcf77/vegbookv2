@@ -21,6 +21,7 @@ type Listing @model
   directions: String
   images: String
   userID: ID
+  owner: String
   commonID: String 
   createdAt: AWSDateTime
 

@@ -23,6 +23,7 @@ const Listing = () => {
     const navigation = useNavigation();
 
     const [userID, setUserID] = useState('');
+    const [userEmail, setUserEmail] = useState('');
 
     const [imageData, setImageData] = useState([]);
     const [category, setCategory] = useState({ categoryID: 0, categoryName: "Tipo de receita" });
@@ -57,6 +58,7 @@ const Listing = () => {
         .then((user) => {
             console.log(user.attributes.sub)
             setUserID(user.attributes.sub)
+            setUserEmail(user.attributes.email)
         })
         .catch((err) => {
             console.log(err);
@@ -105,6 +107,7 @@ const Listing = () => {
                     directions: directions,
                     images: JSON.stringify(imageAllURL),
                     userID: userID,
+                    owner: userEmail,
                     commonID: '1'
                 }
 

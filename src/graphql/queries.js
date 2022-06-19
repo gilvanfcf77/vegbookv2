@@ -12,10 +12,10 @@ export const getListing = /* GraphQL */ `
       directions
       images
       userID
+      owner
       commonID
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -35,10 +35,10 @@ export const listListings = /* GraphQL */ `
         directions
         images
         userID
+        owner
         commonID
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
@@ -70,10 +70,10 @@ export const gettingListingByCreatedAt = /* GraphQL */ `
         directions
         images
         userID
+        owner
         commonID
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }

@@ -15,10 +15,10 @@ export const createListing = /* GraphQL */ `
       directions
       images
       userID
+      owner
       commonID
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -36,10 +36,10 @@ export const updateListing = /* GraphQL */ `
       directions
       images
       userID
+      owner
       commonID
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -57,10 +57,10 @@ export const deleteListing = /* GraphQL */ `
       directions
       images
       userID
+      owner
       commonID
       createdAt
       updatedAt
-      owner
     }
   }
 `;

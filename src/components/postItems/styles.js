@@ -22,13 +22,13 @@ const styles = StyleSheet.create({
     postImage: {
         height: 100,
         width: 100,
-        borderRadius: 30,
+        borderRadius: 0,
         marginLeft: 10,
         marginRight: 20,
         marginVertical: 10
     },
     postContentWrap: {
-        justifyContent: 'space-around',
+        // justifyContent: 'space-between',
         paddingVertical: 10
     },
     postTitle: {

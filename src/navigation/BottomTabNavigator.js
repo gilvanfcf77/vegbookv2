@@ -1,5 +1,6 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from '../screens/Home';
+import Profile from '../screens/Profile';
 import { FontAwesome } from '@expo/vector-icons';
 import { colors } from '../modal/color';
 import PostDetails from '../screens/PostDetails';
@@ -48,8 +49,8 @@ const BottomTabNav = () => {
                     headerShown: false
                 }}
             />
-            <Tab.Screen
-                name='Chat'
+            {/* <Tab.Screen
+                name='Notificações'
                 component={Home}
                 options={{
                     tabBarIcon: ({ color }) => (
@@ -61,10 +62,10 @@ const BottomTabNav = () => {
                     ),
                     headerShown: false
                 }}
-            />
+            /> */}
             <Tab.Screen
-                name='Profile'
-                component={Home}
+                name='Perfil'
+                component={Profile}
                 options={{
                     tabBarIcon: ({ color }) => (
                         <FontAwesome
