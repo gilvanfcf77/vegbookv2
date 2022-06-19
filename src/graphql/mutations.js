@@ -16,6 +16,8 @@ export const createListing = /* GraphQL */ `
       images
       userID
       owner
+      likes
+      comments
       commonID
       createdAt
       updatedAt
@@ -37,6 +39,8 @@ export const updateListing = /* GraphQL */ `
       images
       userID
       owner
+      likes
+      comments
       commonID
       createdAt
       updatedAt
@@ -58,6 +62,8 @@ export const deleteListing = /* GraphQL */ `
       images
       userID
       owner
+      likes
+      comments
       commonID
       createdAt
       updatedAt

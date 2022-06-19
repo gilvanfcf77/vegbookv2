@@ -22,6 +22,8 @@ type Listing @model
   images: String
   userID: ID
   owner: String
+  likes: Int
+  comments: String
   commonID: String 
   createdAt: AWSDateTime
 

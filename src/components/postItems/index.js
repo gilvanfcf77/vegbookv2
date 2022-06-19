@@ -19,10 +19,8 @@ const PostItems = (props) => {
 
     const post = props.post;
 
-    post.likes = 10;
-    post.comments = ['teste', 'teste2'];
-
     const [images] = useState(JSON.parse(post.images));
+    const [comments] = useState(JSON.parse(post.comments));
     const [createdAt] = useState(DateTime.fromISO(post.createdAt).toLocaleString(DateTime.DATETIME_MED));
 
     return (
@@ -53,13 +51,10 @@ const PostItems = (props) => {
                             </View>
                             <View style={{ flexDirection: 'row', marginLeft: 10 }}>
                                 <FontAwesome name="comments" size={18} color="black" />
-                                <Text style={{ marginLeft: 5 }}>{post.comments.length}</Text>
+                                <Text style={{ marginLeft: 5 }}>{comments.length}</Text>
                             </View>
                         </View>
                     </View>
-                    {/* <Text style={styles.postValue}
-                    >$100 / Day
-                    </Text> */}
                 </View>
             </View>
         </Pressable>
