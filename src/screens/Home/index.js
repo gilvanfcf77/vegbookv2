@@ -26,7 +26,7 @@ const Home = () => {
 
     useEffect(() => {
         fetchAllPosts();
-    }, []);
+    }, [postList]);
 
     return (
         <>

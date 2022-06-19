@@ -41,9 +41,8 @@ const SelectCategoryScreen = () => {
             }}
             onPress={() => {
               navigation.navigate(
-                'Listing',
+                'Enviar receita',
                 {
-                  screen: "Enviar receita",
                   categoryID: category.id,
                   categoryName: category.name,
                 }
