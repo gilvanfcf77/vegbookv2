@@ -3,26 +3,36 @@ import {
     Text,
     View,
     Image,
-    ScrollView
+    ScrollView,
+    Pressable
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { colors } from '../../modal/color';
+import { AntDesign } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 
 const PostDetails = () => {
 
     const route = useRoute();
     const navigation = useNavigation();
 
-    const [images, setImages] = useState(JSON.parse(route.params.post.images));
-    const [userEmail, setUserEmail] = useState(route.params.post.owner.split("@")[0]);
+    const [images] = useState(JSON.parse(route.params.post.images));
+    const [userEmail] = useState(route.params.post.owner.split("@")[0]);
     const [ingredients] = useState(route.params.post.ingredients);
     const [directions] = useState(route.params.post.directions);
+    const [likes] = useState(route.params.post.likes);
+    const [comments] = useState(JSON.parse(route.params.post.comments));
+
+    const [like, setLike] = useState(false);
+
+    const handleLike = () => {
+        setLike(!like);
+    }
 
     return (
         <ScrollView>
             <ScrollView horizontal={true}>
                 {images && images.map((image, index) => {
-                    console.log(image.imageUri);
                     return (
                         <Image
                             key={index}
@@ -44,6 +54,20 @@ const PostDetails = () => {
             >
                 {route.params.post.title}
             </Text>
+
+            <View style={{ flexDirection: 'row', marginTop: 10, marginLeft: 10 }}>
+                <View style={{ flexDirection: 'row-reverse' }}>
+                    <Pressable style={{ flexDirection: 'row' }} onPress={() => handleLike() }>
+                        <AntDesign name="heart" size={18} color={like ? colors.basic : 'black'} />
+                        <Text style={{ marginLeft: 5 }}>{likes}</Text>
+                    </Pressable>
+                </View>
+                <View style={{ flexDirection: 'row', marginLeft: 10 }}>
+                    <FontAwesome name="comments" size={18} color="black" />
+                    <Text style={{ marginLeft: 5 }}>{comments.length}</Text>
+                </View>
+            </View>
+
             <View
                 style={{
                     margin: 10
