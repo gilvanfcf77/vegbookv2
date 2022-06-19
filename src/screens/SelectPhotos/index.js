@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Text, View, StyleSheet, SafeAreaView, Alert } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { AssetsSelector } from "expo-images-picker";
 import { Ionicons } from "@expo/vector-icons";
 import { MediaType } from "expo-media-library";
@@ -9,7 +9,7 @@ import { colors } from "../../modal/color";
 const SelectPhotosScreen = () => {
   const navigation = useNavigation();
   const onSuccess = (data) => {
-    navigation.navigate("Listing", { imageData: data });
+    navigation.navigate('Enviar receita', { imageData: data });
   };
 
   const widgetErrors = useMemo(
@@ -29,21 +29,11 @@ const SelectPhotosScreen = () => {
     () => ({
       getImageMetaData: false, // true might perform slower results
       initialLoad: 100,
-      assetsType: [MediaType.photo, MediaType.video],
+      assetsType: [MediaType.photo],
       minSelection: 1,
       maxSelection: 5,
       portraitCols: 2,
-      landscapeCols: 4,
-    }),
-    []
-  );
-
-  const widgetResize = useMemo(
-    () => ({
-      width: 50,
-      compress: 0.7,
-      base64: false,
-      saveTo: "jpeg",
+      landscapeCols: 4
     }),
     []
   );
@@ -69,7 +59,7 @@ const SelectPhotosScreen = () => {
       buttonTextStyle: _textStyle,
       buttonStyle: _buttonStyle,
       onBack: () => {
-        navigation.navigate("Listing");
+        navigation.navigate('Enviar receita');
       },
       onSuccess: (e) => onSuccess(e),
     }),
@@ -92,7 +82,7 @@ const SelectPhotosScreen = () => {
         Component: Ionicons,
         iconName: "ios-checkmark-circle-outline",
         color: "white",
-        bg: "#0eb14970",
+        bg: "#0eb14950",
         size: 26,
       },
     }),

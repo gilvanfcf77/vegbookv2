@@ -36,7 +36,7 @@ const BottomTabNav = () => {
                 }}
             />
             <Tab.Screen
-                name='Listing'
+                name='Enviar receita'
                 component={Listing}
                 options={{
                     tabBarIcon: ({ color }) => (
