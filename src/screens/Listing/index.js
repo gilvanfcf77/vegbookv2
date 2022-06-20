@@ -6,10 +6,11 @@ import {
     TextInput,
     Image,
     ScrollView,
-    Alert
+    Alert,
+    ActivityIndicator
 } from 'react-native';
 import { withAuthenticator } from 'aws-amplify-react-native';
-import { Auth, Storage, API, graphqlOperation } from 'aws-amplify'
+import { Auth, Storage, API } from 'aws-amplify'
 import { AntDesign } from '@expo/vector-icons';
 import { colors } from '../../modal/color';
 import styles from './styles';
@@ -45,7 +46,7 @@ const Listing = () => {
                 [
                     {
                         text: 'OK',
-                        onPress: () => { navigation.navigate('Home', {screen: "Explorar"}) }
+                        onPress: () => { navigation.navigate('Home', { screen: "Explorar" }) }
 
                     }
                 ]
@@ -56,7 +57,6 @@ const Listing = () => {
 
     Auth.currentAuthenticatedUser()
         .then((user) => {
-            console.log(user.attributes.sub)
             setUserID(user.attributes.sub)
             setUserEmail(user.attributes.email)
         })
@@ -70,7 +70,8 @@ const Listing = () => {
     useEffect(() => {
 
         if (!route.params) {
-            console.log('There is no data in route');
+            if (postProcessing) { Alert.alert('Por favor, preencha os campos corretamente!'); }
+            setPostProcessing(false);
         } else {
             if (route.params.imageData !== undefined) {
                 setImageData(route.params.imageData);
@@ -86,6 +87,36 @@ const Listing = () => {
     const storeToDB = async () => {
 
         setPostProcessing(true);
+
+        if (imageData.length === 0) {
+            Alert.alert('Por favor, selecione uma imagem!');
+            setPostProcessing(false);
+            return;
+        }
+
+        if (category.categoryName === "Tipo de receita") {
+            Alert.alert('Por favor, preencha o campo "Tipo de receita"!');
+            setPostProcessing(false);
+            return;
+        }
+
+        if (!title) {
+            Alert.alert('Por favor, preencha o campo "Título"!');
+            setPostProcessing(false);
+            return;
+        }
+
+        if (!ingredients) {
+            Alert.alert('Por favor, preencha o campo "Ingredientes"!');
+            setPostProcessing(false);
+            return;
+        }
+
+        if (!directions) {
+            Alert.alert('Por favor, preencha o campo "Modo de preparo"!');
+            setPostProcessing(false);
+            return;
+        }
 
         imageData && imageData.map(async (image, index) => {
             const imageURL = image.uri;
@@ -243,7 +274,14 @@ const Listing = () => {
                         fontWeight: 'bold'
                     }}
                 >
-                    {postProcessing ? "Processing..." : "Enviar receita"}
+                    {/* {postProcessing ? "Processing..." : } */}
+                    {
+                        postProcessing
+                            ?
+                            <ActivityIndicator size="small" color={colors.basic} />
+                            :
+                            "Enviar receita"
+                    }
                 </Text>
             </Pressable>
         </ScrollView>

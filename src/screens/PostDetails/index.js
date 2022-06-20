@@ -5,7 +5,9 @@ import {
     Image,
     ScrollView,
     Pressable,
-    TextInput
+    TextInput,
+    ActivityIndicator,
+    Alert
 } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { colors } from '../../modal/color';
@@ -16,26 +18,114 @@ import { Divider } from 'react-native-paper';
 const { DateTime } = require("luxon");
 import 'intl';
 import 'intl/locale-data/jsonp/en-ZA'
+import { Auth, API } from 'aws-amplify'
+import { updateListing } from '../../graphql/mutations';
 
 const PostDetails = () => {
 
     const route = useRoute();
 
+    const [loading, setLoading] = useState(false);
+
+    const [id] = useState(route.params.post.id);
     const [images] = useState(JSON.parse(route.params.post.images));
+    const [title] = useState(route.params.post.title);
+    const [categoryName] = useState(route.params.post.categoryName);
+    const [categoryID] = useState(route.params.post.categoryID);
+    const [userID] = useState(route.params.post.userID);
     const [userEmail] = useState(route.params.post.owner.split("@")[0]);
     const [ingredients] = useState(route.params.post.ingredients);
     const [directions] = useState(route.params.post.directions);
     const [createdAt] = useState(DateTime.fromISO(route.params.post.createdAt).toLocaleString(DateTime.DATETIME_MED));
     const [likes] = useState(route.params.post.likes);
     const [comments] = useState(JSON.parse(route.params.post.comments));
+    const [commonID] = useState(route.params.post.commonID);
 
     const [like, setLike] = useState(false);
     const [comment, setComment] = useState('');
 
-    console.log('commentários: ', comments);
+    const handleLike = async () => {
 
-    const handleLike = () => {
+        const postData = {
+            id: id,
+            title: title,
+            categoryName: categoryName,
+            categoryID: categoryID,
+            ingredients: ingredients,
+            directions: directions,
+            images: route.params.post.images,
+            userID: userID,
+            owner: userEmail,
+            comments: JSON.stringify(comments),
+            commonID: commonID
+        }
+
         setLike(!like);
+
+        if (like) {
+
+            postData.likes = likes + 1;
+
+            await API.graphql({
+                query: updateListing,
+                variables: { input: postData },
+                authMode: 'AMAZON_COGNITO_USER_POOLS'
+            });
+        }
+        else {
+            postData.likes = likes - 1;
+
+            await API.graphql({
+                query: updateListing,
+                variables: { input: postData },
+                authMode: 'AMAZON_COGNITO_USER_POOLS'
+            });
+        }
+    }
+
+    const handleComment = async () => {
+
+        setLoading(true);
+
+        const user = await Auth.currentAuthenticatedUser();
+
+        if (comment !== '') {
+            const newComment = {
+                text: comment,
+                owner: user.attributes.email,
+                createdAt: DateTime.local().toISO()
+            }
+
+            comments.push(newComment);
+
+            const postData = {
+                id: id,
+                title: title,
+                categoryName: categoryName,
+                categoryID: categoryID,
+                ingredients: ingredients,
+                directions: directions,
+                images: route.params.post.images,
+                userID: userID,
+                owner: userEmail,
+                likes: likes,
+                comments: JSON.stringify(comments),
+                commonID: commonID
+            }
+
+            await API.graphql({
+                query: updateListing,
+                variables: { input: postData },
+                authMode: 'AMAZON_COGNITO_USER_POOLS'
+            });
+
+            setLoading(false);
+
+        }
+        else {
+            Alert.alert('Você ainda não digitou um comentário!');
+            setLoading(false);
+        }
     }
 
     return (
@@ -111,17 +201,22 @@ const PostDetails = () => {
                 <View>
                     <Text style={{ color: colors.grey, margin: 10 }}>Comentários: </Text>
                     {comments.map((comment, index) => {
+
+
+                        const userName = comment.owner.split("@")[0];
+                        const createdAt = DateTime.fromISO(comment.createdAt).toLocaleString(DateTime.DATETIME_MED);
+
                         return (
                             <View key={index}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 10 }}>
                                     <View style={{ flexDirection: 'row' }}>
                                         <Text style={{}}>por</Text>
-                                        <Text style={{ fontWeight: 'bold', marginLeft: 5 }}>{comment.owner}</Text>
+                                        <Text style={{ fontWeight: 'bold', marginLeft: 5 }}>{userName}</Text>
                                     </View>
-                                    <Text style={{ marginLeft: 10, color: colors.grey }}>{comment.createdAt}</Text>
+                                    <Text style={{ marginLeft: 10, color: colors.grey }}>{createdAt}</Text>
                                 </View>
                                 <Text key={index} style={{ margin: 10 }}>
-                                    {comment.comment}
+                                    {comment.text}
                                 </Text>
                                 <Divider />
                             </View>
@@ -140,7 +235,17 @@ const PostDetails = () => {
                             setComment(text);
                         }}
                     />
-                    <Ionicons name="md-send-sharp" size={24} color={colors.basic} style={{ paddingRight: 20 }} />
+                    <Pressable onPress={() => handleComment()}>
+                        {
+                            loading
+                                ?
+                                <ActivityIndicator size="small" color={colors.basic} />
+                                :
+                                <Ionicons name="md-send-sharp" size={24} color={colors.basic} style={{ paddingRight: 20 }}
+                                />
+                        }
+
+                    </Pressable>
                 </View>
             </View>
 

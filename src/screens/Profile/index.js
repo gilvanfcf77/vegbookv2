@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable, Alert } from 'react-native';
 import { colors } from '../../modal/color';
 import { Auth, Storage, API, graphqlOperation } from 'aws-amplify'
 
@@ -38,7 +38,7 @@ const Profile = () => {
                     {userEmail}
                 </Text>
                 <Pressable
-                    onPress={() => { alert('Ainda não é possível fazer logout') }}
+                    onPress={() => { Alert.alert('Ainda não é possível fazer logout') }}
                     style={{
                         borderRadius: 30,
                         backgroundColor: colors.primary,
