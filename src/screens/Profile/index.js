@@ -1,66 +1,102 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Pressable, Alert } from 'react-native';
 import { colors } from '../../modal/color';
-import { Auth, Storage, API, graphqlOperation } from 'aws-amplify'
+import { Auth } from 'aws-amplify'
+import { useNavigation } from '@react-navigation/native';
 
 const Profile = () => {
 
-    const [userID, setUserID] = useState('');
+    const navigation = useNavigation();
     const [userEmail, setUserEmail] = useState('');
 
-    Auth.currentAuthenticatedUser()
-        .then((user) => {
-            setUserID(user.attributes.sub)
-            setUserEmail(user.attributes.email)
-        })
-        .catch((err) => {
-            console.log(err);
-            throw err;
-        })
+    useEffect(() => {
+        Auth.currentAuthenticatedUser()
+            .then((user) => {
+                setUserEmail(user.attributes.email)
+            })
+            .catch((err) => {
+                console.log(err);
+                throw err;
+            })
+    }, [userEmail]);
+
+    const signOutFunc = async () => {
+
+        setUserEmail('');
+
+        await Auth.signOut()
+            .then(data => {
+                console.log("signed out...");
+            })
+            .catch(e => console.log("error: ", e));
+        
+        Alert.alert('Logout realizado com sucesso!');
+
+        return navigation.navigate('Home', { screen: "Explorar" });
+    };
 
     return (
         <>
-            <View style={{ margin: 10, marginTop: 250 }}>
-                <Text
-                    style={{
-                        color: colors.grey,
-                        alignSelf: 'center',
-                    }}
-                >
-                    Você está logado como
-                </Text>
-                <Text
-                    style={{
-                        fontWeight: 'bold',
-                        alignSelf: 'center',
-                    }}
-                >
-                    {userEmail}
-                </Text>
-                <Pressable
-                    onPress={() => { Alert.alert('Ainda não é possível fazer logout') }}
-                    style={{
-                        borderRadius: 30,
-                        backgroundColor: colors.primary,
-                        alignItems: 'center',
-                        paddingLeft: 20,
-                        marginTop: 20,
-                        elevation: 5
-                    }}
-                >
-                    <Text
-                        style={{
-                            color: colors.secondary,
-                            paddingVertical: 12,
-                            fontSize: 14.5,
-                            fontWeight: 'bold'
-                        }}
-                    >
-                        Logout
-                    </Text>
-                </Pressable>
+            {
+                userEmail
+                    ?
+                    <View style={{ margin: 10, marginTop: 250 }}>
+                        <Text
+                            style={{
+                                color: colors.grey,
+                                alignSelf: 'center',
+                            }}
+                        >
+                            Você está logado como
+                        </Text>
+                        <Text
+                            style={{
+                                fontWeight: 'bold',
+                                alignSelf: 'center',
+                            }}
+                        >
+                            {userEmail}
+                        </Text>
 
-            </View>
+                        <Pressable
+                            onPress={() => { signOutFunc() }}
+                            style={{
+                                borderRadius: 30,
+                                backgroundColor: colors.primary,
+                                alignItems: 'center',
+                                paddingLeft: 20,
+                                marginTop: 20,
+                                elevation: 5
+                            }}
+                        >
+
+                            <Text
+                                style={{
+                                    color: colors.secondary,
+                                    paddingVertical: 12,
+                                    fontSize: 14.5,
+                                    fontWeight: 'bold'
+                                }}
+                            >
+                                Logout
+                            </Text>
+
+                        </Pressable>
+
+                    </View>
+                    :
+                    <View style={{ margin: 10, marginTop: 250 }}>
+                        <Text
+                            style={{
+                                color: colors.grey,
+                                alignSelf: 'center',
+                            }}
+                        >
+                            Você não está logado!
+                        </Text>
+                    </View>
+            }
+
 
         </>
     );

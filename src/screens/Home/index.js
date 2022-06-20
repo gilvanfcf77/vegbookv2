@@ -3,7 +3,7 @@ import PostItems from '../../components/postItems';
 import HeaderForMobile from '../../components/headerForMobile';
 import { gettingListingByCreatedAt } from '../../graphql/queries';
 import { Auth, Storage, API, graphqlOperation } from 'aws-amplify'
-import { FlatList } from 'react-native';
+import { FlatList, Image } from 'react-native';
 
 const Home = () => {
 
@@ -30,8 +30,17 @@ const Home = () => {
 
     return (
         <>
-            <HeaderForMobile />
-            <FlatList 
+            {/* <HeaderForMobile /> */}
+            <Image
+                source={require('../../../assets/Logo.png')}
+                style={{
+                    height: 50,
+                    resizeMode: 'contain',
+                    alignSelf: 'center',
+                    marginTop: 10    
+                }}
+            />
+            <FlatList
                 data={postList}
                 renderItem={({ item }) => <PostItems post={item} />}
             />

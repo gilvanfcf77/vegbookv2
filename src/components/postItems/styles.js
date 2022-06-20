@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.white,
         marginVertical: 10,
         marginHorizontal: 10,
-        borderRadius: 10,
+        borderRadius: 0,
         shadowColor: colors.black,
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.8,
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.secondary,
         alignSelf: 'flex-start',
         padding: 5,
-        borderRadius: 10
+        borderRadius: 0
     }
 });
 

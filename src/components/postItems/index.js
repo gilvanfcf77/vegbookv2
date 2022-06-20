@@ -21,6 +21,7 @@ const PostItems = (props) => {
 
     const [images] = useState(JSON.parse(post.images));
     const [comments] = useState(JSON.parse(post.comments));
+    const [likes] = useState(JSON.parse(post.likes));
     const [createdAt] = useState(DateTime.fromISO(post.createdAt).toLocaleString(DateTime.DATETIME_MED));
 
     return (
@@ -47,7 +48,7 @@ const PostItems = (props) => {
                         <View style={{ flexDirection: 'row', marginTop: 10 }}>
                             <View style={{ flexDirection: 'row' }}>
                                 <AntDesign name="heart" size={18} color="black" />
-                                <Text style={{ marginLeft: 5 }}>{post.likes}</Text>
+                                <Text style={{ marginLeft: 5 }}>{likes.length}</Text>
                             </View>
                             <View style={{ flexDirection: 'row', marginLeft: 10 }}>
                                 <FontAwesome name="comments" size={18} color="black" />

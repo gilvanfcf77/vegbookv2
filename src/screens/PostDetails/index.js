@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Text,
     View,
@@ -20,6 +20,7 @@ import 'intl';
 import 'intl/locale-data/jsonp/en-ZA'
 import { Auth, API } from 'aws-amplify'
 import { updateListing } from '../../graphql/mutations';
+import { getListing } from '../../graphql/queries';
 
 const PostDetails = () => {
 
@@ -37,49 +38,75 @@ const PostDetails = () => {
     const [ingredients] = useState(route.params.post.ingredients);
     const [directions] = useState(route.params.post.directions);
     const [createdAt] = useState(DateTime.fromISO(route.params.post.createdAt).toLocaleString(DateTime.DATETIME_MED));
-    const [likes] = useState(route.params.post.likes);
+    const [likes] = useState(JSON.parse(route.params.post.likes));
     const [comments] = useState(JSON.parse(route.params.post.comments));
     const [commonID] = useState(route.params.post.commonID);
 
-    const [like, setLike] = useState(false);
+    const [liked, setLiked] = useState(false);
     const [comment, setComment] = useState('');
+
+    console.log('likes: ', likes);
 
     const handleLike = async () => {
 
-        const postData = {
-            id: id,
-            title: title,
-            categoryName: categoryName,
-            categoryID: categoryID,
-            ingredients: ingredients,
-            directions: directions,
-            images: route.params.post.images,
-            userID: userID,
-            owner: userEmail,
-            comments: JSON.stringify(comments),
-            commonID: commonID
-        }
+        const user = await Auth.currentAuthenticatedUser();
 
-        setLike(!like);
+        setLiked(!liked);
 
-        if (like) {
+        if (liked && !likes.some(like => like.owner === user.attributes.sub)) {
 
-            postData.likes = likes + 1;
+            const newLike = { owner: user.attributes.sub };
 
-            await API.graphql({
-                query: updateListing,
-                variables: { input: postData },
-                authMode: 'AMAZON_COGNITO_USER_POOLS'
-            });
-        }
-        else {
-            postData.likes = likes - 1;
+            console.log(newLike);
+
+            likes.push(newLike);
+
+            const postData = {
+                id: id,
+                title: title,
+                categoryName: categoryName,
+                categoryID: categoryID,
+                ingredients: ingredients,
+                directions: directions,
+                images: route.params.post.images,
+                userID: userID,
+                owner: userEmail,
+                likes: JSON.stringify(likes),
+                comments: JSON.stringify(comments),
+                commonID: commonID
+            }
 
             await API.graphql({
                 query: updateListing,
                 variables: { input: postData },
                 authMode: 'AMAZON_COGNITO_USER_POOLS'
             });
+        }
+        else if (!liked && likes.some(like => like.owner === user.attributes.sub)) {
+
+            const newLikes = likes.filter(like => like.owner !== user.attributes.sub);
+
+            const postData = {
+                id: id,
+                title: title,
+                categoryName: categoryName,
+                categoryID: categoryID,
+                ingredients: ingredients,
+                directions: directions,
+                images: route.params.post.images,
+                userID: userID,
+                owner: userEmail,
+                likes: JSON.stringify(newLikes),
+                comments: JSON.stringify(comments),
+                commonID: commonID
+            }
+
+            await API.graphql({
+                query: updateListing,
+                variables: { input: postData },
+                authMode: 'AMAZON_COGNITO_USER_POOLS'
+            });
+
         }
     }
 
@@ -157,8 +184,8 @@ const PostDetails = () => {
             <View style={{ flexDirection: 'row', marginTop: 10, marginLeft: 10 }}>
                 <View style={{ flexDirection: 'row-reverse' }}>
                     <Pressable style={{ flexDirection: 'row' }} onPress={() => handleLike()}>
-                        <AntDesign name="heart" size={18} color={like ? colors.basic : 'black'} />
-                        <Text style={{ marginLeft: 5 }}>{likes}</Text>
+                        <AntDesign name="heart" size={18} color={liked ? colors.basic : 'black'} />
+                        <Text style={{ marginLeft: 5 }}>{likes.length}</Text>
                     </Pressable>
                 </View>
                 <View style={{ flexDirection: 'row', marginLeft: 10 }}>
