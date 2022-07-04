@@ -8,6 +8,7 @@ import {
 import styles from './styles';
 // import { FontAwesome } from '@expo/vector-icons';
 import { useState } from 'react';
+import { useGlobal, setGlobal } from 'reactn';
 
 const HeaderForMobile = () => {
 
@@ -53,6 +54,9 @@ const HeaderForMobile = () => {
                             <Pressable key={index}
                                 onPress={() => {
                                     setCategory(item)
+                                    setGlobal({
+                                        'category': item
+                                    });
                                 }}>
                                 <Text style={{ fontWeight: category === item ? 'bold' : 'normal' }}>
                                     {item}
