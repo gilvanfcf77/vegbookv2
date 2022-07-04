@@ -38,77 +38,9 @@ const PostDetails = () => {
     const [ingredients] = useState(route.params.post.ingredients);
     const [directions] = useState(route.params.post.directions);
     const [createdAt] = useState(DateTime.fromISO(route.params.post.createdAt).toLocaleString(DateTime.DATETIME_MED));
-    const [likes] = useState(JSON.parse(route.params.post.likes));
     const [comments] = useState(JSON.parse(route.params.post.comments));
     const [commonID] = useState(route.params.post.commonID);
-
-    const [liked, setLiked] = useState(false);
     const [comment, setComment] = useState('');
-
-    console.log('likes: ', likes);
-
-    const handleLike = async () => {
-
-        const user = await Auth.currentAuthenticatedUser();
-
-        setLiked(!liked);
-
-        if (liked && !likes.some(like => like.owner === user.attributes.sub)) {
-
-            const newLike = { owner: user.attributes.sub };
-
-            console.log(newLike);
-
-            likes.push(newLike);
-
-            const postData = {
-                id: id,
-                title: title,
-                categoryName: categoryName,
-                categoryID: categoryID,
-                ingredients: ingredients,
-                directions: directions,
-                images: route.params.post.images,
-                userID: userID,
-                owner: userEmail,
-                likes: JSON.stringify(likes),
-                comments: JSON.stringify(comments),
-                commonID: commonID
-            }
-
-            await API.graphql({
-                query: updateListing,
-                variables: { input: postData },
-                authMode: 'AMAZON_COGNITO_USER_POOLS'
-            });
-        }
-        else if (!liked && likes.some(like => like.owner === user.attributes.sub)) {
-
-            const newLikes = likes.filter(like => like.owner !== user.attributes.sub);
-
-            const postData = {
-                id: id,
-                title: title,
-                categoryName: categoryName,
-                categoryID: categoryID,
-                ingredients: ingredients,
-                directions: directions,
-                images: route.params.post.images,
-                userID: userID,
-                owner: userEmail,
-                likes: JSON.stringify(newLikes),
-                comments: JSON.stringify(comments),
-                commonID: commonID
-            }
-
-            await API.graphql({
-                query: updateListing,
-                variables: { input: postData },
-                authMode: 'AMAZON_COGNITO_USER_POOLS'
-            });
-
-        }
-    }
 
     const handleComment = async () => {
 
@@ -135,7 +67,6 @@ const PostDetails = () => {
                 images: route.params.post.images,
                 userID: userID,
                 owner: userEmail,
-                likes: likes,
                 comments: JSON.stringify(comments),
                 commonID: commonID
             }
@@ -181,14 +112,17 @@ const PostDetails = () => {
                 {route.params.post.title}
             </Text>
 
+            <View style={{ flexDirection: 'row', marginTop: 5, marginLeft: 10 }}>
+                <Text style={{ color: colors.grey }}>
+                    Categoria:
+                </Text>
+                <Text style={{ marginLeft: 5, color: colors.grey }}>
+                    {categoryName}
+                </Text>
+            </View>
+
             <View style={{ flexDirection: 'row', marginTop: 10, marginLeft: 10 }}>
-                <View style={{ flexDirection: 'row-reverse' }}>
-                    <Pressable style={{ flexDirection: 'row' }} onPress={() => handleLike()}>
-                        <AntDesign name="heart" size={18} color={liked ? colors.basic : 'black'} />
-                        <Text style={{ marginLeft: 5 }}>{likes.length}</Text>
-                    </Pressable>
-                </View>
-                <View style={{ flexDirection: 'row', marginLeft: 10 }}>
+                <View style={{ flexDirection: 'row' }}>
                     <FontAwesome name="comments" size={18} color="black" />
                     <Text style={{ marginLeft: 5 }}>{comments.length}</Text>
                 </View>

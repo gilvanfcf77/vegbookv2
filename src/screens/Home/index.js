@@ -30,16 +30,7 @@ const Home = () => {
 
     return (
         <>
-            {/* <HeaderForMobile /> */}
-            <Image
-                source={require('../../../assets/Logo.png')}
-                style={{
-                    height: 50,
-                    resizeMode: 'contain',
-                    alignSelf: 'center',
-                    marginTop: 10    
-                }}
-            />
+            <HeaderForMobile />
             <FlatList
                 data={postList}
                 renderItem={({ item }) => <PostItems post={item} />}

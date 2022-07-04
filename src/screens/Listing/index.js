@@ -139,7 +139,6 @@ const Listing = () => {
                     images: JSON.stringify(imageAllURL),
                     userID: userID,
                     owner: userEmail,
-                    likes: [],
                     comments: [],
                     commonID: '1'
                 }

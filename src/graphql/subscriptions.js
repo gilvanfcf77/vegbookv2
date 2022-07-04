@@ -13,7 +13,6 @@ export const onCreateListing = /* GraphQL */ `
       images
       userID
       owner
-      likes
       comments
       commonID
       createdAt
@@ -33,7 +32,6 @@ export const onUpdateListing = /* GraphQL */ `
       images
       userID
       owner
-      likes
       comments
       commonID
       createdAt
@@ -53,7 +51,6 @@ export const onDeleteListing = /* GraphQL */ `
       images
       userID
       owner
-      likes
       comments
       commonID
       createdAt
