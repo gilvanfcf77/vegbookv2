@@ -77,6 +77,9 @@ const Listing = () => {
         .then((user) => {
             setUserID(user.attributes.sub)
             setUserEmail(user.attributes.email)
+            setGlobal({
+                'email': user.attributes.email
+            });
         })
         .catch((err) => {
             console.log(err);

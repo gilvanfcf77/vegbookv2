@@ -3,30 +3,20 @@ import { View, Text, Pressable, Alert } from 'react-native';
 import { colors } from '../../modal/color';
 import { Auth } from 'aws-amplify'
 import { useNavigation } from '@react-navigation/native';
+import { useGlobal, setGlobal } from 'reactn';
 
 const Profile = () => {
 
     const navigation = useNavigation();
-    const [userEmail, setUserEmail] = useState('');
-
-    useEffect(() => {
-        Auth.currentAuthenticatedUser()
-            .then((user) => {
-                setUserEmail(user.attributes.email)
-            })
-            .catch((err) => {
-                console.log(err);
-                throw err;
-            })
-    }, [userEmail]);
+    const [email] = useGlobal('email');
 
     const signOutFunc = async () => {
 
-        setUserEmail('');
-
         await Auth.signOut()
-            .then(data => {
-                console.log("signed out...");
+            .then(() => {
+                setGlobal({
+                    'email': ''
+                })
             })
             .catch(e => console.log("error: ", e));
         
@@ -38,7 +28,7 @@ const Profile = () => {
     return (
         <>
             {
-                userEmail
+                email
                     ?
                     <View style={{ margin: 10, marginTop: 250 }}>
                         <Text
@@ -47,7 +37,7 @@ const Profile = () => {
                                 alignSelf: 'center',
                             }}
                         >
-                            Você está logado como
+                            Você está logado(a) como
                         </Text>
                         <Text
                             style={{
@@ -55,7 +45,7 @@ const Profile = () => {
                                 alignSelf: 'center',
                             }}
                         >
-                            {userEmail}
+                            {email}
                         </Text>
 
                         <Pressable
@@ -92,7 +82,7 @@ const Profile = () => {
                                 alignSelf: 'center',
                             }}
                         >
-                            Você não está logado!
+                            Você não está logado(a)!
                         </Text>
                     </View>
             }
