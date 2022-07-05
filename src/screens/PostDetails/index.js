@@ -77,6 +77,7 @@ const PostDetails = () => {
                 authMode: 'AMAZON_COGNITO_USER_POOLS'
             });
 
+            setComment('');
             setLoading(false);
 
         }
@@ -192,6 +193,7 @@ const PostDetails = () => {
                     <TextInput
                         placeholder='Escreva um comentário'
                         style={{ width: '90%' }}
+                        value={comment}
                         onChangeText={(text) => {
                             setComment(text);
                         }}
