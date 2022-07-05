@@ -3,9 +3,7 @@ import Home from '../screens/Home';
 import Profile from '../screens/Profile';
 import { FontAwesome } from '@expo/vector-icons';
 import { colors } from '../modal/color';
-import PostDetails from '../screens/PostDetails';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Entypo } from '@expo/vector-icons';
 import Listing from '../screens/Listing';
 
 const BottomTabNav = () => {
@@ -49,20 +47,6 @@ const BottomTabNav = () => {
                     headerShown: false
                 }}
             />
-            {/* <Tab.Screen
-                name='Notificações'
-                component={Home}
-                options={{
-                    tabBarIcon: ({ color }) => (
-                        <Entypo
-                            name="chat"
-                            size={24}
-                            color={color}
-                        />
-                    ),
-                    headerShown: false
-                }}
-            /> */}
             <Tab.Screen
                 name='Perfil'
                 component={Profile}

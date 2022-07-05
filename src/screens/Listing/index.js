@@ -18,6 +18,8 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 import { createListing } from '../../graphql/mutations';
+import { gettingListingByCreatedAt } from '../../graphql/queries';
+import { setGlobal } from 'reactn';
 
 const Listing = () => {
 
@@ -34,6 +36,22 @@ const Listing = () => {
 
     const [postSuccess, setPostSuccess] = useState('');
     const [postProcessing, setPostProcessing] = useState(false);
+
+    const fetchAllPosts = async () => {
+        try {
+            const itemListByCommonID = await API.graphql({
+                query: gettingListingByCreatedAt,
+                variables: { commonID: '1', sortDirection: 'DESC' },
+                authMode: 'AWS_IAM'
+            });
+            setGlobal({
+                'posts': itemListByCommonID.data.gettingListingByCreatedAt.items
+            });
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     useEffect(() => {
         if (postSuccess !== '') {
@@ -151,7 +169,7 @@ const Listing = () => {
 
                 setPostProcessing(false);
                 setPostSuccess("Receita cadastrada com sucesso!");
-
+                fetchAllPosts();
             }
 
         })

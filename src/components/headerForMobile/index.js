@@ -1,14 +1,12 @@
 import {
     Text,
     View,
-    // TextInput,
     Image,
     Pressable
 } from 'react-native';
 import styles from './styles';
-// import { FontAwesome } from '@expo/vector-icons';
-import { useState } from 'react';
-import { useGlobal, setGlobal } from 'reactn';
+import { useEffect, useState } from 'react';
+import { setGlobal } from 'reactn';
 
 const HeaderForMobile = () => {
 
@@ -21,16 +19,14 @@ const HeaderForMobile = () => {
     ])
     const [category, setCategory] = useState('Todas');
 
+    useEffect(() => {
+        setGlobal({
+            'category': 'Todas'
+        });
+    }, []);
+    
     return (
         <View style={styles.headerWrap}>
-            {/* <View style={styles.searchByTextWrap}>
-                <FontAwesome name="search" size={24} color="black" />
-                <TextInput
-                    placeholder='Pesquisar receita'
-                    style={styles.searchPlaceholder}
-                    multiline={false}
-                />
-            </View> */}
             <Image
                 source={require('../../../assets/Logo.png')}
                 style={{

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "VegBookF",
-    "slug": "VegBookF",
+    "name": "VegBook",
+    "slug": "VegBook",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -18,16 +18,15 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.vegbook.vegbook",
+      "buildNumber": "1.0.0"
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      }
+      "package": "com.vegbook.vegbook",
+      "versionCode": 1
     },
     "web": {
-      "favicon": "./assets/favicon.png"
-    }
+    "favicon": "./assets/favicon.png"
   }
+}
 }
