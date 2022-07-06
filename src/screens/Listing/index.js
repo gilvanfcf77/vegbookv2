@@ -181,7 +181,6 @@ const Listing = () => {
     return (
         <ScrollView style={{ margin: 10 }}>
             <View>
-                <Text style={{ marginTop: 10 }}>Upload Images (max 5)</Text>
                 <Pressable
                     style={{
                         backgroundColor: colors.white,
@@ -199,7 +198,7 @@ const Listing = () => {
                         navigation.navigate('SelectPhoto');
                     }}
                 >
-                    <AntDesign name="pluscircle" size={24} color="black" />
+                    <AntDesign name="camera" size={24} color="black" />
                 </Pressable>
                 <View>
                     <ScrollView horizontal={true}>
@@ -294,7 +293,6 @@ const Listing = () => {
                         fontWeight: 'bold'
                     }}
                 >
-                    {/* {postProcessing ? "Processing..." : } */}
                     {
                         postProcessing
                             ?

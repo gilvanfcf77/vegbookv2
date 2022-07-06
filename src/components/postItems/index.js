@@ -7,11 +7,8 @@ import {
 } from 'react-native';
 import styles from './styles';
 import { useNavigation } from '@react-navigation/native';
-import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
-const { DateTime } = require("luxon");
-import 'intl';
-import 'intl/locale-data/jsonp/en-ZA'
+import { getFormattedDate } from '../../services/Date';
 
 const PostItems = (props) => {
 
@@ -21,7 +18,7 @@ const PostItems = (props) => {
 
     const [images] = useState(JSON.parse(post.images));
     const [comments] = useState(JSON.parse(post.comments));
-    const [createdAt] = useState(DateTime.fromISO(post.createdAt).toLocaleString(DateTime.DATETIME_MED));
+    const [createdAt] = useState(getFormattedDate(post.createdAt))
 
     return (
         <Pressable

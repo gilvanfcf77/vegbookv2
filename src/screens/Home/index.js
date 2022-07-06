@@ -10,7 +10,7 @@ const Home = () => {
     const [category] = useGlobal('category');
     const [posts] = useGlobal('posts');
 
-    const filteredList = posts.filter((post) => post.categoryName === category)
+    const filteredList = posts?.filter((post) => post.categoryName === category)
 
     const fetchAllPosts = async () => {
         try {
@@ -30,7 +30,7 @@ const Home = () => {
 
     useEffect(() => {
         fetchAllPosts();
-    }, [posts.length]);
+    }, [posts?.length]);
 
     return (
         <>

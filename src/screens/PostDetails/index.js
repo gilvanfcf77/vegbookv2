@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
     Text,
     View,
@@ -6,27 +6,25 @@ import {
     ScrollView,
     Pressable,
     TextInput,
-    ActivityIndicator,
-    Alert
+    ActivityIndicator
 } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { colors } from '../../modal/color';
-import { AntDesign } from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { Divider } from 'react-native-paper';
-const { DateTime } = require("luxon");
-import 'intl';
-import 'intl/locale-data/jsonp/en-ZA'
-import { Auth, API } from 'aws-amplify'
-import { updateListing } from '../../graphql/mutations';
-import { getListing } from '../../graphql/queries';
+import { getFormattedDate } from '../../services/Date';
+import useContainer from './Container';
 
 const PostDetails = () => {
 
-    const route = useRoute();
+    const {
+        loading,
+        comment,
+        setComment,
+        handleComment
+    } = useContainer();
 
-    const [loading, setLoading] = useState(false);
+    const route = useRoute();
 
     const [id] = useState(route.params.post.id);
     const [images] = useState(JSON.parse(route.params.post.images));
@@ -37,55 +35,9 @@ const PostDetails = () => {
     const [userEmail] = useState(route.params.post.owner.split("@")[0]);
     const [ingredients] = useState(route.params.post.ingredients);
     const [directions] = useState(route.params.post.directions);
-    const [createdAt] = useState(DateTime.fromISO(route.params.post.createdAt).toLocaleString(DateTime.DATETIME_MED));
+    const [createdAt] = useState(getFormattedDate(route.params.post.createdAt));
     const [comments] = useState(JSON.parse(route.params.post.comments));
     const [commonID] = useState(route.params.post.commonID);
-    const [comment, setComment] = useState('');
-
-    const handleComment = async () => {
-
-        setLoading(true);
-
-        const user = await Auth.currentAuthenticatedUser();
-
-        if (comment !== '') {
-            const newComment = {
-                text: comment,
-                owner: user.attributes.email,
-                createdAt: DateTime.local().toISO()
-            }
-
-            comments.push(newComment);
-
-            const postData = {
-                id: id,
-                title: title,
-                categoryName: categoryName,
-                categoryID: categoryID,
-                ingredients: ingredients,
-                directions: directions,
-                images: route.params.post.images,
-                userID: userID,
-                owner: userEmail,
-                comments: JSON.stringify(comments),
-                commonID: commonID
-            }
-
-            await API.graphql({
-                query: updateListing,
-                variables: { input: postData },
-                authMode: 'AMAZON_COGNITO_USER_POOLS'
-            });
-
-            setComment('');
-            setLoading(false);
-
-        }
-        else {
-            Alert.alert('Você ainda não digitou um comentário!');
-            setLoading(false);
-        }
-    }
 
     return (
         <ScrollView>
@@ -166,7 +118,7 @@ const PostDetails = () => {
 
 
                         const userName = comment.owner.split("@")[0];
-                        const createdAt = DateTime.fromISO(comment.createdAt).toLocaleString(DateTime.DATETIME_MED);
+                        const createdAt = getFormattedDate(comment.createdAt);
 
                         return (
                             <View key={index}>
@@ -198,7 +150,22 @@ const PostDetails = () => {
                             setComment(text);
                         }}
                     />
-                    <Pressable onPress={() => handleComment()}>
+                    <Pressable onPress={
+                        () => handleComment
+                            (
+                                id,
+                                title,
+                                categoryName,
+                                categoryID,
+                                ingredients,
+                                directions,
+                                route.params.post.images,
+                                userID,
+                                userEmail,
+                                comments,
+                                commonID
+                            )
+                    }>
                         {
                             loading
                                 ?
