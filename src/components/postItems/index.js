@@ -9,6 +9,7 @@ import styles from './styles';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
 import { getFormattedDate } from '../../services/Date';
+import { getUser } from '../../services/User';
 
 const PostItems = (props) => {
 
@@ -38,7 +39,7 @@ const PostItems = (props) => {
                     <View>
                         <Text style={styles.postTitle}>{post.title}</Text>
                         <View style={{ marginTop: 10 }}>
-                            <Text style={styles.postPlace}>Enviada por {post.owner.split("@")[0]}</Text>
+                            <Text style={styles.postPlace}>Enviada por {getUser(post.owner)}</Text>
                             <Text style={styles.postPlace}>em {createdAt}</Text>
                         </View>
                         <View style={{ flexDirection: 'row', marginTop: 10 }}>

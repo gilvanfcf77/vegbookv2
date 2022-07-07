@@ -13,6 +13,7 @@ import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { Divider } from 'react-native-paper';
 import { getFormattedDate } from '../../services/Date';
 import useContainer from './Container';
+import { getUser } from '../../services/User';
 
 const PostDetails = () => {
 
@@ -82,7 +83,7 @@ const PostDetails = () => {
             >
                 <View style={{ flexDirection: 'row' }}>
                     <Text>por</Text>
-                    <Text style={{ fontWeight: 'bold', marginLeft: 5 }}>{userEmail}</Text>
+                    <Text style={{ fontWeight: 'bold', marginLeft: 5 }}>{getUser(userEmail)}</Text>
                 </View>
                 <Text style={{ color: colors.grey }}>{createdAt}</Text>
             </View>
@@ -109,7 +110,7 @@ const PostDetails = () => {
                     {comments.map((comment, index) => {
 
 
-                        const userName = comment.owner.split("@")[0];
+                        const userName = getUser(comment.owner);
                         const createdAt = getFormattedDate(comment.createdAt);
 
                         return (
