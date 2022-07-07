@@ -1,6 +1,5 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import Home from '../screens/Home';
 import PostDetails from '../screens/PostDetails';
 import SelectPhotosScreen from '../screens/SelectPhotos';
 import BottomTabNav from './BottomTabNavigator';

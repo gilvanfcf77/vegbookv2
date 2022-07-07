@@ -1,29 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Pressable, Alert } from 'react-native';
+import React from 'react';
+import { View, Text, Pressable } from 'react-native';
 import { colors } from '../../modal/color';
-import { Auth } from 'aws-amplify'
-import { useNavigation } from '@react-navigation/native';
-import { useGlobal, setGlobal } from 'reactn';
+import useContainer from './Container';
 
 const Profile = () => {
 
-    const navigation = useNavigation();
-    const [email] = useGlobal('email');
-
-    const signOutFunc = async () => {
-
-        await Auth.signOut()
-            .then(() => {
-                setGlobal({
-                    'email': ''
-                })
-            })
-            .catch(e => console.log("error: ", e));
-        
-        Alert.alert('Logout realizado com sucesso!');
-
-        return navigation.navigate('Home', { screen: "Explorar" });
-    };
+    const {
+        signOut,
+        email
+    } = useContainer();
 
     return (
         <>
@@ -49,7 +34,7 @@ const Profile = () => {
                         </Text>
 
                         <Pressable
-                            onPress={() => { signOutFunc() }}
+                            onPress={() => { signOut() }}
                             style={{
                                 borderRadius: 30,
                                 backgroundColor: colors.primary,

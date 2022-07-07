@@ -2,28 +2,31 @@ import { useState } from 'react';
 import { Auth, API } from 'aws-amplify';
 import { getDate } from '../../services/Date';
 import { updateListing } from '../../graphql/mutations';
-import {
-    Alert
-} from 'react-native';
+import { useRoute } from '@react-navigation/native';
+import { Alert } from 'react-native';
+import { getFormattedDate } from '../../services/Date';
 
 export default () => {
+
+    const route = useRoute();
 
     const [loading, setLoading] = useState(false);
     const [comment, setComment] = useState('');
 
-    const handleComment = async (
-        id,
-        title,
-        categoryName,
-        categoryID,
-        ingredients,
-        directions,
-        images,
-        userID,
-        userEmail,
-        comments,
-        commonID
-    ) => {
+    const [id] = useState(route.params.post.id);
+    const [images] = useState(JSON.parse(route.params.post.images));
+    const [title] = useState(route.params.post.title);
+    const [categoryName] = useState(route.params.post.categoryName);
+    const [categoryID] = useState(route.params.post.categoryID);
+    const [userID] = useState(route.params.post.userID);
+    const [userEmail] = useState(route.params.post.owner.split("@")[0]);
+    const [ingredients] = useState(route.params.post.ingredients);
+    const [directions] = useState(route.params.post.directions);
+    const [createdAt] = useState(getFormattedDate(route.params.post.createdAt));
+    const [comments] = useState(JSON.parse(route.params.post.comments));
+    const [commonID] = useState(route.params.post.commonID);
+
+    const handleComment = async () => {
 
         setLoading(true);
 
@@ -45,7 +48,7 @@ export default () => {
                 categoryID: categoryID,
                 ingredients: ingredients,
                 directions: directions,
-                images: images,
+                images: route.params.post.images,
                 userID: userID,
                 owner: userEmail,
                 comments: JSON.stringify(comments),
@@ -69,9 +72,22 @@ export default () => {
     }
 
     return {
+        route,
         loading,
-        comment, 
+        comment,
         setComment,
+        id,
+        images,
+        title,
+        categoryName,
+        categoryID,
+        userID,
+        userEmail,
+        ingredients,
+        directions,
+        createdAt,
+        comments,
+        commonID,
         handleComment
     };
 } 

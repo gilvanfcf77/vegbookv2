@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import {
   Text,
   ScrollView,
@@ -13,7 +13,7 @@ const SelectCategoryScreen = () => {
 
   const { data } = useDatabase();
 
-  const [categories, setCategories] = useState(data);
+  const [categories] = useState(data);
 
   return (
     <ScrollView>

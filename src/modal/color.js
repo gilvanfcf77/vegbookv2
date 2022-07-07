@@ -5,13 +5,6 @@ export const colors = {
     secondary: '#EBECF4',
     white: 'white',
     black: '#000',
-    grey: 'grey'
+    grey: 'grey',
+    selectedImage: "#0eb14950"
 }
-
-// color: '#838899'
-// color: '#C4C6CE',
-// color: '#454D65'
-// borderColor: "#175d03",
-// borderBottomColor: '#EBECF4',
-// shadowColor: '#454D65',
-// backgroundColor: '#f7fff2'

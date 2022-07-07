@@ -1,10 +1,11 @@
 import React, { useMemo } from "react";
-import { View, StyleSheet } from "react-native";
+import { View } from "react-native";
 import { AssetsSelector } from "expo-images-picker";
 import { Ionicons } from "@expo/vector-icons";
 import { MediaType } from "expo-media-library";
 import { useNavigation } from "@react-navigation/native";
 import { colors } from "../../modal/color";
+import styles from "./styles";
 
 const SelectPhotosScreen = () => {
   const navigation = useNavigation();
@@ -14,7 +15,7 @@ const SelectPhotosScreen = () => {
 
   const widgetErrors = useMemo(
     () => ({
-      errorTextColor: "black",
+      errorTextColor: colors.black,
       errorMessages: {
         hasErrorWithPermissions: "Please Allow media gallery permissions.",
         hasErrorWithLoading: "There was error while loading images.",
@@ -27,7 +28,7 @@ const SelectPhotosScreen = () => {
 
   const widgetSettings = useMemo(
     () => ({
-      getImageMetaData: false, // true might perform slower results
+      getImageMetaData: false,
       initialLoad: 100,
       assetsType: [MediaType.photo],
       minSelection: 1,
@@ -38,15 +39,6 @@ const SelectPhotosScreen = () => {
     []
   );
 
-  const _textStyle = {
-    color: "white",
-  };
-
-  const _buttonStyle = {
-    backgroundColor: colors.primary,
-    borderRadius: 5,
-  };
-
   const widgetNavigator = useMemo(
     () => ({
       Texts: {
@@ -54,10 +46,10 @@ const SelectPhotosScreen = () => {
         back: "Voltar",
         selected: "selecionada(s)",
       },
-      midTextColor: "black",
+      midTextColor: colors.black,
       minSelection: 1,
-      buttonTextStyle: _textStyle,
-      buttonStyle: _buttonStyle,
+      buttonTextStyle: styles.textStyle,
+      buttonStyle: styles.buttonStyle,
       onBack: () => {
         navigation.navigate('Enviar receita');
       },
@@ -69,7 +61,7 @@ const SelectPhotosScreen = () => {
   const widgetStyles = useMemo(
     () => ({
       margin: 2,
-      bgColor: "white",
+      bgColor: colors.white,
       spinnerColor: "blue",
       widgetWidth: 99,
       videoIcon: {
@@ -82,7 +74,7 @@ const SelectPhotosScreen = () => {
         Component: Ionicons,
         iconName: "ios-checkmark-circle-outline",
         color: "white",
-        bg: "#0eb14950",
+        bg: colors.selectedImage,
         size: 26,
       },
     }),
@@ -100,11 +92,5 @@ const SelectPhotosScreen = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
 
 export default SelectPhotosScreen;

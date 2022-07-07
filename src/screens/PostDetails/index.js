@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
     Text,
     View,
@@ -8,7 +8,6 @@ import {
     TextInput,
     ActivityIndicator
 } from 'react-native';
-import { useRoute } from '@react-navigation/native';
 import { colors } from '../../modal/color';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { Divider } from 'react-native-paper';
@@ -18,26 +17,19 @@ import useContainer from './Container';
 const PostDetails = () => {
 
     const {
+        route,
         loading,
         comment,
         setComment,
+        images,
+        categoryName,
+        userEmail,
+        ingredients,
+        directions,
+        createdAt,
+        comments,
         handleComment
     } = useContainer();
-
-    const route = useRoute();
-
-    const [id] = useState(route.params.post.id);
-    const [images] = useState(JSON.parse(route.params.post.images));
-    const [title] = useState(route.params.post.title);
-    const [categoryName] = useState(route.params.post.categoryName);
-    const [categoryID] = useState(route.params.post.categoryID);
-    const [userID] = useState(route.params.post.userID);
-    const [userEmail] = useState(route.params.post.owner.split("@")[0]);
-    const [ingredients] = useState(route.params.post.ingredients);
-    const [directions] = useState(route.params.post.directions);
-    const [createdAt] = useState(getFormattedDate(route.params.post.createdAt));
-    const [comments] = useState(JSON.parse(route.params.post.comments));
-    const [commonID] = useState(route.params.post.commonID);
 
     return (
         <ScrollView>
@@ -124,7 +116,7 @@ const PostDetails = () => {
                             <View key={index}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', margin: 10 }}>
                                     <View style={{ flexDirection: 'row' }}>
-                                        <Text style={{}}>por</Text>
+                                        <Text>por</Text>
                                         <Text style={{ fontWeight: 'bold', marginLeft: 5 }}>{userName}</Text>
                                     </View>
                                     <Text style={{ marginLeft: 10, color: colors.grey }}>{createdAt}</Text>
@@ -139,7 +131,6 @@ const PostDetails = () => {
                 </View>
             </View>
 
-
             <View style={{ flexDirection: 'column', marginLeft: 10, marginTop: 60 }}>
                 <View style={{ flexDirection: 'row' }}>
                     <TextInput
@@ -150,22 +141,7 @@ const PostDetails = () => {
                             setComment(text);
                         }}
                     />
-                    <Pressable onPress={
-                        () => handleComment
-                            (
-                                id,
-                                title,
-                                categoryName,
-                                categoryID,
-                                ingredients,
-                                directions,
-                                route.params.post.images,
-                                userID,
-                                userEmail,
-                                comments,
-                                commonID
-                            )
-                    }>
+                    <Pressable onPress={() => handleComment()}>
                         {
                             loading
                                 ?
