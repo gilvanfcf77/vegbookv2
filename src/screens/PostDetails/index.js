@@ -29,8 +29,11 @@ const PostDetails = () => {
         directions,
         createdAt,
         comments,
-        handleComment
+        handleComment,
+        isLogged
     } = useContainer();
+
+    console.log(isLogged);
 
     return (
         <ScrollView>
@@ -132,7 +135,10 @@ const PostDetails = () => {
                 </View>
             </View>
 
-            <View style={{ flexDirection: 'column', marginLeft: 10, marginTop: 60 }}>
+            {
+                isLogged 
+                ?
+                <View style={{ flexDirection: 'column', marginLeft: 10, marginTop: 60 }}>
                 <View style={{ flexDirection: 'row' }}>
                     <TextInput
                         placeholder='Escreva um comentário'
@@ -155,6 +161,11 @@ const PostDetails = () => {
                     </Pressable>
                 </View>
             </View>
+            :
+            null
+
+            }
+
 
         </ScrollView>
     );

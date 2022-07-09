@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Auth, API } from 'aws-amplify';
 import { getDate } from '../../services/Date';
 import { updateListing } from '../../graphql/mutations';
@@ -25,6 +25,21 @@ export default () => {
     const [createdAt] = useState(getFormattedDate(route.params.post.createdAt));
     const [comments] = useState(JSON.parse(route.params.post.comments));
     const [commonID] = useState(route.params.post.commonID);
+
+    const [isLogged, setIsLogged] = useState(false);
+
+    const isLoggedIn = async () => {
+        try {
+            await Auth.currentAuthenticatedUser();
+            setIsLogged(true);
+        } catch (error) {
+            setIsLogged(false);
+        }
+    }
+
+    useEffect(() => {
+        isLoggedIn();
+    }, []);
 
     const handleComment = async () => {
 
@@ -88,6 +103,7 @@ export default () => {
         createdAt,
         comments,
         commonID,
-        handleComment
+        handleComment,
+        isLogged
     };
 } 
