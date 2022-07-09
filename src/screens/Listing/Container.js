@@ -38,10 +38,20 @@ export default () => {
             throw err;
         })
 
+    const resetFields = () => {
+        setImageData([]);
+        setCategory({ categoryID: 0, categoryName: "Tipo de receita" });
+        setTitle("");
+        setIngredients("");
+        setDirections("");
+    }
+
     useEffect(() => {
         if (postSuccess !== '') {
 
             setPostProcessing(false);
+
+            resetFields();
 
             Alert.alert(
                 'Sucesso',
@@ -49,8 +59,9 @@ export default () => {
                 [
                     {
                         text: 'OK',
-                        onPress: () => { navigation.navigate('Home', { screen: "Explorar" }) }
-
+                        onPress: () => {
+                            navigation.navigate('Home', { screen: "Explorar" })
+                        }
                     }
                 ]
             )
@@ -150,8 +161,11 @@ export default () => {
     return {
         imageData,
         category,
+        title,
         setTitle,
+        ingredients,
         setIngredients,
+        directions,
         setDirections,
         postProcessing,
         navigation,

@@ -17,10 +17,10 @@ const SelectPhotosScreen = () => {
     () => ({
       errorTextColor: colors.black,
       errorMessages: {
-        hasErrorWithPermissions: "Please Allow media gallery permissions.",
-        hasErrorWithLoading: "There was error while loading images.",
-        hasErrorWithResizing: "There was error while loading images.",
-        hasNoAssets: "No images found.",
+        hasErrorWithPermissions: "Por favor, habilite as permissões para o acesso a fotos.",
+        hasErrorWithLoading: "Ocorreu um erro ao carregar as imagens.",
+        hasErrorWithResizing: "Ocorreu um erro ao carregar as imagens.",
+        hasNoAssets: "Nenhuma imagem encontrada.",
       },
     }),
     []

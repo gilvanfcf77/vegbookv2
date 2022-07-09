@@ -20,8 +20,11 @@ const Listing = () => {
     const {
         imageData,
         category,
+        title,
         setTitle,
+        ingredients,
         setIngredients,
+        directions,
         setDirections,
         postProcessing,
         navigation,
@@ -93,6 +96,7 @@ const Listing = () => {
             <View style={styles.inputTextStyle}>
                 <TextInput
                     placeholder='Escreva um título'
+                    value={title}
                     style={{ width: '100%' }}
                     onChangeText={(text) => {
                         setTitle(text);
@@ -103,6 +107,7 @@ const Listing = () => {
             <View style={styles.inputTextStyle}>
                 <TextInput
                     placeholder='Liste os ingredientes'
+                    value={ingredients}
                     style={{ width: '100%' }}
                     multiline={true}
                     onChangeText={(text) => {
@@ -114,6 +119,7 @@ const Listing = () => {
             <View style={styles.inputTextStyle}>
                 <TextInput
                     placeholder='Descreva o modo de preparo'
+                    value={directions}
                     style={{ width: '100%' }}
                     multiline={true}
                     onChangeText={(text) => {
