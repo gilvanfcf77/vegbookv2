@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import PostItems from '../../components/postItems';
 import HeaderForMobile from '../../components/headerForMobile';
 import { FlatList, RefreshControl } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 import { useGlobal } from 'reactn';
 import { fetchAllPosts } from '../../services/Posts';
 
@@ -22,6 +23,8 @@ const Home = () => {
 
     const filteredList = posts?.filter((post) => post.categoryName === category)
 
+    const isFocused = useIsFocused();
+
     const fetchPosts = async () => {
         await fetchAllPosts();
     }
@@ -31,26 +34,30 @@ const Home = () => {
     }, [posts?.length]);
 
     return (
-        <>
-            <HeaderForMobile />
-            <FlatList
-                data=
-                {
-                    category === 'Todas'
-                        ?
-                        posts
-                        :
-                        filteredList
-                }
-                renderItem={({ item }) => <PostItems post={item} />}
-                refreshControl={
-                    <RefreshControl
-                        refreshing={refreshing}
-                        onRefresh={onRefresh}
-                    />
-                }
-            />
-        </>
+        isFocused
+            ?
+            <>
+                <HeaderForMobile />
+                <FlatList
+                    data=
+                    {
+                        category === 'Todas'
+                            ?
+                            posts
+                            :
+                            filteredList
+                    }
+                    renderItem={({ item }) => <PostItems post={item} />}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={refreshing}
+                            onRefresh={onRefresh}
+                        />
+                    }
+                />
+            </>
+            :
+            null
     );
 }
 
