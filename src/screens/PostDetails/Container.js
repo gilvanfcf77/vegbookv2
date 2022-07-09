@@ -5,6 +5,7 @@ import { updateListing } from '../../graphql/mutations';
 import { useRoute } from '@react-navigation/native';
 import { Alert } from 'react-native';
 import { getFormattedDate } from '../../services/Date';
+import { fetchAllPosts } from '../../services/Posts';
 
 export default () => {
 
@@ -77,6 +78,7 @@ export default () => {
             });
 
             setComment('');
+            fetchAllPosts();
             setLoading(false);
 
         }
