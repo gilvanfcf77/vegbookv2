@@ -33,8 +33,6 @@ const PostDetails = () => {
         isLogged
     } = useContainer();
 
-    console.log(isLogged);
-
     return (
         <ScrollView>
             <ScrollView horizontal={true}>
