@@ -5,25 +5,16 @@ import {
     Pressable
 } from 'react-native';
 import styles from './styles';
-import { useEffect, useState } from 'react';
 import { setGlobal } from 'reactn';
+import useContainer from './Container';
 
 const HeaderForMobile = () => {
 
-    const [categories] = useState([
-        'Todas',
-        'Vegetariana',
-        'Inclui ovos',
-        'Inclui leite',
-        'Inclui ovos e leite'
-    ])
-    const [category, setCategory] = useState('Todas');
-
-    useEffect(() => {
-        setGlobal({
-            'category': 'Todas'
-        });
-    }, []);
+    const {
+        category,
+        setCategory,
+        categories
+    } = useContainer();
     
     return (
         <View style={styles.headerWrap}>
