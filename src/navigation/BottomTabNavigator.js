@@ -5,6 +5,8 @@ import { FontAwesome } from '@expo/vector-icons';
 import { colors } from '../modal/color';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Listing from '../screens/Listing';
+import SelectCategoryScreen from '../screens/SelectCategory';
+import PostDetails from '../screens/PostDetails';
 
 const BottomTabNav = () => {
 
@@ -59,6 +61,24 @@ const BottomTabNav = () => {
                         />
                     ),
                     headerShown: false
+                }}
+            />
+            <Tab.Screen
+                name='SelectCategory'
+                component={SelectCategoryScreen}
+                options={{
+                    headerShown: false,
+                    tabBarButton: (props) => null,
+                    tabBarVisible: false,
+                }}
+            />
+            <Tab.Screen
+                name='PostDetails'
+                component={PostDetails}
+                options={{
+                    headerShown: false,
+                    tabBarButton: (props) => null,
+                    tabBarVisible: false,
                 }}
             />
 
